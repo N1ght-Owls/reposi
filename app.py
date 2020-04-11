@@ -25,11 +25,12 @@ def signup():
     assert resp.ok
     return "You have successfully logged in as @{login} on GitHub".format(login=resp.json()["login"])
 
+
 def parseRepos(repo):
     parsedRepos = []
     for repo in repo:
         parsedRepo = {
-            'name': repo['name'],
+            'name': repo['full_name'],
             'description': repo['description'],
             'issues': repo['open_issues'],
             'owner': repo['owner']['login'],
@@ -57,6 +58,3 @@ def thing(username):
 @app.route("/")
 def serveMain():
     return flask.render_template('index.html')
-
-
-    
