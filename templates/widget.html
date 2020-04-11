@@ -1,7 +1,66 @@
 <html>
+    <head>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
+    </head>
     <body>
-        {% if repos %}
-        <p>{% repos %}</p>
-        {% endif %}
+        <div class="row row-cols-1 row-cols-md-3">
+            {% for repo in repos %}
+            <div class="col mb-4">
+                <div class="card">
+                    <h5 class="card-header">
+                        {{repo["name"]}}
+                    </h5>
+                    <div class="card-body">
+                        <p>
+                            {% if repo["description"] == None %} No description
+                            provided {% else %} {{repo["description"]}} {% endif
+                            %}
+                        </p>
+                        <a href="{{repo['url']}}" class="card-link"
+                            >Source Code</a
+                        >
+                        <p class="card-text">
+                            {% if repo["language"] %}
+                            <small class="text-muted">
+                                {{repo["language"]}}
+                            </small>
+                            {% endif %}
+                            <small class="text-muted">
+                                {{repo["stars"]}} {%if repo["stars"]!=1%} stars
+                                {%else%} star {%endif%}
+                            </small>
+                            <small class="text-muted">
+                                {{repo["forks"]}} {%if repo["forks"]!=1%} forks
+                                {%else%} fork {%endif%}
+                            </small>
+                            <small class="text-muted">
+                                {{repo["size"]}}kb
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"
+        ></script>
     </body>
 </html>
