@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 import os, requests, random
 from flask_dance.contrib.github import make_github_blueprint, github
@@ -37,10 +37,10 @@ else:
 #Routing and repository parsing
 @app.route("/signup")
 def signup():
+
+    resp = github.get("/user")
     if not github.authorized:
         return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    
     print(resp.json())
     assert resp.ok
     user = User.query.filter_by(username=resp.json()['login']).first()
@@ -51,7 +51,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         message = f"You have successfully logged in as @{resp.json()['login']} on GitHub"
-    return flask.render_template("docs.html", message=message)
+    return redirect(f"/docs?message={message}")
 
 
 def parseRepos(repo):
@@ -94,8 +94,7 @@ def serveMain():
 
 @app.route("/docs")
 def docs():
-    return flask.render_template('docs.html')
-
+    return flask.render_template('docs.html', message=request.args.get('message'))
 
 if __name__ == '__main__':
    app.run(debug=True)
