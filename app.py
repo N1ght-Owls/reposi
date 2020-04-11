@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os, requests, random
 from flask_dance.contrib.github import make_github_blueprint, github
 import flask
+from os import path
 
 app = Flask(__name__,  template_folder="templates", static_folder = 'static')
 #Various environmental variables
@@ -27,6 +28,11 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+if path.exists("db.sqlite") == True: 
+    print("Database exists") 
+else: 
+    print("Creating database") 
+    db.create_all()
 
 #Routing and repository parsing
 @app.route("/signup")
@@ -68,7 +74,7 @@ def parseRepos(repo):
 
 @app.route("/widget/<username>")
 def thing(username):
-    token = request.args.get('token')
+    token = requests.args.get('token')
     db.session.commit()
     user = User.query.filter_by(username=username).first()
     if (user.github_hash != token):
