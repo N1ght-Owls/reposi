@@ -13,11 +13,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
 
 app.secret_key = os.environ.get("FLASK_SECRET")
-blueprint = make_github_blueprint(
-    client_id=os.environ.get("REPOSI_GITHUB_CLIENT"),
-    client_secret=os.environ.get("REPOSI_GITHUB_SECRET"),
-)
-app.register_blueprint(blueprint, url_prefix="/login")
+app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get("REPOSI_GITHUB_CLIENT_ID")
+app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get("REPOSI_GITHUB_SECRET")
+github_bp = make_github_blueprint()
+app.register_blueprint(github_bp, url_prefix="/login")
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
