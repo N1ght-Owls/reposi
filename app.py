@@ -1,13 +1,14 @@
 import requests
 import flask
 from flask import Flask, redirect, url_for
-#import redis
+from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_dance.contrib.github import make_github_blueprint, github
-#db_ip = os.environ['DBIP']
-#db_conn = redis.Redis(host=db_ip, port=6379, db=0)
+
 
 app = flask.Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+db = SQLAlchemy(app)
 
 app.secret_key = os.environ.get("FLASK_SECRET")
 blueprint = make_github_blueprint(
@@ -17,11 +18,12 @@ blueprint = make_github_blueprint(
 app.register_blueprint(blueprint, url_prefix="/login")
 
 
-@app.route("/")
+@app.route("/signup")
 def signup():
     if not github.authorized:
         return redirect(url_for("github.login"))
     resp = github.get("/user")
+    print(resp.json())
     assert resp.ok
     return f"You have successfully logged in as @{resp.json()['login']} on GitHub"
 
