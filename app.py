@@ -1,8 +1,11 @@
-import markovify
 import requests
 import flask
+import redis
+import os
 app = flask.Flask(__name__)
 
+db_ip = os.environ['DBIP']
+db_conn = redis.Redis(host=db_ip, port=6379, db=0)
 
 def parseRepos(repo):
     parsedRepos = []
