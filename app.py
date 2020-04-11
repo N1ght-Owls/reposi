@@ -17,6 +17,7 @@ def thing(username):
     sent = mark.make_sentence()
     if sent == None:
         sent = "Too few tweets to imitate"
+    print(sent)
     return sent
 
 
