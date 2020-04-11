@@ -2,8 +2,9 @@ from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os, requests, random
 from flask_dance.contrib.github import make_github_blueprint, github
-from app import app
 import flask
+
+app = Flask(__name__,  template_folder="templates", static_folder = 'static')
 #Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get("REPOSI_GITHUB_CLIENT_ID")
@@ -17,7 +18,6 @@ app.register_blueprint(github_bp, url_prefix="/login")
 #Database model & connection
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
-db.create_all()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +26,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
 
 #Routing and repository parsing
 @app.route("/signup")
@@ -44,7 +45,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         message = f"You have successfully logged in as @{resp.json()['login']} on GitHub"
-    flask.render_template("docs.html", message=message)
+    return flask.render_template("docs.html", message=message)
 
 
 def parseRepos(repo):
@@ -88,3 +89,7 @@ def serveMain():
 @app.route("/docs")
 def docs():
     return flask.render_template('docs.html')
+
+
+if __name__ == '__main__':
+   app.run(debug=True)
