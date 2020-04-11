@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os, requests, random
 from flask_dance.contrib.github import make_github_blueprint, github
 from app import app
+import flask
 
 #Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
