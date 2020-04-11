@@ -17,6 +17,13 @@ blueprint = make_github_blueprint(
 )
 app.register_blueprint(blueprint, url_prefix="/login")
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    github_hash = db.Column(db.String(80), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 @app.route("/signup")
 def signup():
