@@ -1,11 +1,29 @@
 import requests
 import flask
-import redis
+from flask import Flask, redirect, url_for
+#import redis
 import os
+from flask_dance.contrib.github import make_github_blueprint, github
+#db_ip = os.environ['DBIP']
+#db_conn = redis.Redis(host=db_ip, port=6379, db=0)
+
 app = flask.Flask(__name__)
 
-db_ip = os.environ['DBIP']
-db_conn = redis.Redis(host=db_ip, port=6379, db=0)
+app.secret_key = os.environ.get("FLASK_SECRET")
+blueprint = make_github_blueprint(
+    client_id=os.environ.get("REPOSI_GITHUB_CLIENT"),
+    client_secret=os.environ.get("REPOSI_GITHUB_SECRET"),
+)
+app.register_blueprint(blueprint, url_prefix="/login")
+
+
+@app.route("/")
+def signup():
+    if not github.authorized:
+        return redirect(url_for("github.login"))
+    resp = github.get("/user")
+    assert resp.ok
+    return "You have successfully logged in as @{login} on GitHub".format(login=resp.json()["login"])
 
 def parseRepos(repo):
     parsedRepos = []
@@ -39,3 +57,6 @@ def thing(username):
 @app.route("/")
 def serveMain():
     return flask.render_template('index.html')
+
+
+    
