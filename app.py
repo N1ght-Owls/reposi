@@ -3,6 +3,7 @@ import flask
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+import random
 from flask_dance.contrib.github import make_github_blueprint, github
 
 
@@ -32,6 +33,8 @@ def signup():
     resp = github.get("/user")
     print(resp.json())
     assert resp.ok
+    user = User(username= resp.json()['login'], github_hash= str(random.getrandbits(128)))
+    db.session.add(user)
     return f"You have successfully logged in as @{resp.json()['login']} on GitHub"
 
 
@@ -60,7 +63,7 @@ def thing(username):
     print(resp)
     if type(resp) is dict:
         return f'ERROR: {resp["message"]}'
-
+    
     return flask.render_template('widget.html', repos=parseRepos(resp))
 
 
