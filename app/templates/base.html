@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://aspencdn.me/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">       
+
+    <style>
+        p {
+            font-family: "Open Sans";
+        }
+        h1, h2, h3 {
+            font-family: "Raleway";
+        }
+    </style>
+</head>
+
+<body style="padding:0px;">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="/">
+        Riposi</a>
+    <button
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarSupportedContent"
+            data-toggle="collapse"
+            type="button">
+        <span class="navbar-toggler-icon"> </span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="mr-auto"></div>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="/"><button type="button" class="btn btn-outline-primary"style='margin-right:16px'>Home</button></a>
+            </li>
+            <li class="nav-item">
+                <a href="/sources"><button type="button" class="btn btn-outline-success"style='margin-right:16px'>Docs</button></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% block content %}{% endblock %}
+</body>
+</html>
