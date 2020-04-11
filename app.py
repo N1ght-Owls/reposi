@@ -1,18 +1,11 @@
-import markovify
 import requests
 import flask
 app = flask.Flask(__name__)
 
 
-@app.route("/widget/<username>")
-def thing(username):
-    resp = requests.get(
-        f"https://api.github.com/users/{username}/repos").json()
-    print(resp)
-    if type(resp) is dict:
-        return f'ERROR: {resp["message"]}'
+def parseRepos(repo):
     parsedRepos = []
-    for repo in resp:
+    for repo in repo:
         parsedRepo = {
             'name': repo['name'],
             'description': repo['description'],
@@ -24,8 +17,19 @@ def thing(username):
             'size': repo['size'],
             'language': repo['language']
         }
-        parsedRepos += parsedRepo
-    return flask.render_template('widget.html', **context={repos=parsedRepos})
+        parsedRepos.append(parsedRepo)
+    return parsedRepos
+
+
+@app.route("/widget/<username>")
+def thing(username):
+    resp = requests.get(
+        f"https://api.github.com/users/{username}/repos").json()
+    print(resp)
+    if type(resp) is dict:
+        return f'ERROR: {resp["message"]}'
+
+    return flask.render_template('widget.html', repos=parseRepos(resp))
 
 
 @app.route("/")

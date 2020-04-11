@@ -1,46 +1,6 @@
 <html>
     <head>
-        <title>Markover by N1ght 0wls</title>
+        <title>Github Widget by N1ght 0wls</title>
     </head>
-    <body>
-        <div id="app">
-            <form>
-                <input
-                    type="text"
-                    v-model="user"
-                    placeholder="Insert Twitter User"
-                />
-                <button @click.prevent="doStuff()" value="Generate" />
-            </form>
-            <p v-if="response" v-text="response"></p>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script>
-            var app = new Vue({
-                el: "#app",
-                data: {
-                    response: null,
-                    user: "",
-                },
-                watch: {
-                    user() {
-                        console.log(this.user);
-                    },
-                },
-                methods: {
-                    async doStuff() {
-                        try {
-                            const data = await (
-                                await fetch(`/api/${user}`)
-                            ).text();
-                            this.response = data;
-                        } catch (e) {
-                            console.log(e);
-                            this.response = e;
-                        }
-                    },
-                },
-            });
-        </script>
-    </body>
+    <body></body>
 </html>
