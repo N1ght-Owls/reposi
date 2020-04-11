@@ -1,4 +1,4 @@
-app/__pycache__/*
+__pycache__/
 .vscode/*
 db.sqlite
 docker-compose.yml
