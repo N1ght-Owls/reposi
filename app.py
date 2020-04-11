@@ -31,6 +31,7 @@ def signup():
     if not github.authorized:
         return redirect(url_for("github.login"))
     resp = github.get("/user")
+    
     print(resp.json())
     assert resp.ok
     user = User(username= resp.json()['login'], github_hash= str(random.getrandbits(128)))
