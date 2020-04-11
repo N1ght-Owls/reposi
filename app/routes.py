@@ -74,3 +74,7 @@ def thing(username):
 @app.route("/")
 def serveMain():
     return flask.render_template('index.html')
+
+@app.route("/docs")
+def docs():
+    return flask.render_template('docs.html')
