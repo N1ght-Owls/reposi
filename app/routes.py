@@ -1,20 +1,22 @@
-from flask_sqlalchemy import SQLAlchemy
-import random
-from flask_dance.contrib.github import make_github_blueprint, github
-import requests
 from flask import Flask, redirect, url_for
-import os
-import flask
+from flask_sqlalchemy import SQLAlchemy
+import os, requests, random
+from flask_dance.contrib.github import make_github_blueprint, github
 from app import app
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-db = SQLAlchemy(app)
 
+#Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get("REPOSI_GITHUB_CLIENT_ID")
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get("REPOSI_GITHUB_SECRET")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
+#Github blueprint
 github_bp = make_github_blueprint()
 app.register_blueprint(github_bp, url_prefix="/login")
+
+#Database model & connection
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,10 +26,7 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
+#Routing and repository parsing
 @app.route("/signup")
 def signup():
     if not github.authorized:
