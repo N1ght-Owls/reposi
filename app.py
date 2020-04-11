@@ -9,6 +9,7 @@ from flask_dance.contrib.github import make_github_blueprint, github
 
 app = flask.Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
 
 app.secret_key = os.environ.get("FLASK_SECRET")
@@ -70,3 +71,6 @@ def thing(username):
 @app.route("/")
 def serveMain():
     return flask.render_template('index.html')
+
+if __name__ == "__main__":
+    app.run(debug=True)
