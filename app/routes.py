@@ -4,7 +4,6 @@ import os, requests, random
 from flask_dance.contrib.github import make_github_blueprint, github
 from app import app
 import flask
-
 #Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get("REPOSI_GITHUB_CLIENT_ID")
@@ -18,6 +17,7 @@ app.register_blueprint(github_bp, url_prefix="/login")
 #Database model & connection
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
+db.create_all()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,10 +36,15 @@ def signup():
     
     print(resp.json())
     assert resp.ok
-    user = User(username= resp.json()['login'], github_hash= str(random.getrandbits(128)))
-    db.session.add(user)
-    db.session.commit()
-    return f"You have successfully logged in as @{resp.json()['login']} on GitHub"
+    user = User.query.filter_by(username=resp.json()['login']).first()
+    if user:
+        message = f"You have successfully logged in as @{resp.json()['login']}. Your api token is {user.github_hash}"
+    else:
+        user = User(username= resp.json()['login'], github_hash= str(random.getrandbits(128)))
+        db.session.add(user)
+        db.session.commit()
+        message = f"You have successfully logged in as @{resp.json()['login']} on GitHub"
+    flask.render_template("docs.html", message=message)
 
 
 def parseRepos(repo):
@@ -62,6 +67,11 @@ def parseRepos(repo):
 
 @app.route("/widget/<username>")
 def thing(username):
+    token = request.args.get('token')
+    db.session.commit()
+    user = User.query.filter_by(username=username).first()
+    if (user.github_hash != token):
+        return "You do not have the correct api token"
     resp = requests.get(
         f"https://api.github.com/users/{username}/repos").json()
     print(resp)
