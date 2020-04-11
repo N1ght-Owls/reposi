@@ -36,6 +36,7 @@ def signup():
     assert resp.ok
     user = User(username= resp.json()['login'], github_hash= str(random.getrandbits(128)))
     db.session.add(user)
+    db.session.commit()
     return f"You have successfully logged in as @{resp.json()['login']} on GitHub"
 
 
