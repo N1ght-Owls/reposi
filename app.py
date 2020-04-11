@@ -23,7 +23,7 @@ def signup():
         return redirect(url_for("github.login"))
     resp = github.get("/user")
     assert resp.ok
-    return "You have successfully logged in as @{login} on GitHub".format(login=resp.json()["login"])
+    return f"You have successfully logged in as @{resp.json()['login']} on GitHub"
 
 
 def parseRepos(repo):
