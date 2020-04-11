@@ -1,13 +1,11 @@
-import requests
-import flask
-from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import os
 import random
 from flask_dance.contrib.github import make_github_blueprint, github
-
-
-app = flask.Flask(__name__)
+import requests
+from flask import Flask, redirect, url_for
+import os
+import flask
+from app import app
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
@@ -25,6 +23,10 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 @app.route("/signup")
 def signup():
@@ -72,6 +74,3 @@ def thing(username):
 @app.route("/")
 def serveMain():
     return flask.render_template('index.html')
-
-if __name__ == "__main__":
-    app.run(debug=True)
