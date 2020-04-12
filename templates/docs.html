@@ -20,17 +20,17 @@
     <p>
         Since you have associated your GitHub account, you can simply
         embed
-        <pre><code class="language-html">&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
-            style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-            &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt
-        </code></pre>
+        <pre><code class="language-html">&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
+    style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt</code></pre>
         on your website to display your widget and also auto resize to fit. This is what it looks like:
     </p>
     <div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"></script>
         <iframe
             src="{{hostname}}/widget/{{username}}?token={{token}}"
-            style="width:100%;border:none;overflow:hidden;" 
-            id="GitHubIframe"
+            style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"
         ></iframe>
         <script src="/iframe.js"></script>
     </div>
@@ -42,7 +42,6 @@
     </p>
 
     {% else %}
-
 
     <p>
         First things first, you need to associate your GitHub account. This is
