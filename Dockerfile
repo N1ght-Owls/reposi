@@ -1,16 +1,7 @@
-#Work in Progress
+FROM tiangolo/meinheld-gunicorn:python3.7
 
-FROM debian:buster
+VOLUME ["/app"]
 
-RUN [ "mkdir", "/app" ]
-RUN [ "apt", "update" ]
-RUN [ "apt", "upgrade", "-y" ]
-RUN [ "apt", "install", "-y", "python3-pip", "sqlite3" ]
+COPY ./requirements.txt /opt/requirements.txt
 
-COPY app.py /app/
-
-RUN [ "pip3", "install", "flask", "flask_dance", "flask_sqlalchemy" ]
-
-EXPOSE 5000
-
-CMD [ "python3", "/app/app.py" ]
+RUN [ "pip", "install", "-r", "/opt/requirements.txt" ]
