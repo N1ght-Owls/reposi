@@ -18,7 +18,6 @@ app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
     "REPOSI_GITHUB_SECRET")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
-
 # Github blueprint
 github_bp = make_github_blueprint()
 app.register_blueprint(github_bp, url_prefix="/login")
@@ -50,6 +49,7 @@ def signup():
     resp = github.get("/user")
     if not github.authorized:
         return redirect(url_for("github.login"))
+    print(resp)
     assert resp.ok
     user = User.query.filter_by(username=resp.json()['login']).first()
     if user:
@@ -62,7 +62,7 @@ def signup():
         db.session.commit()
         username = resp.json()['login']
         github_hash = user.github_hash
-    return redirect(f"http://localhost:5000/docs?username={username}&token={github_hash}")
+    return redirect(f"{os.environ.get('FLASK_HOST')}/docs?username={username}&token={github_hash}")
 
 
 def parseRepos(repo):
@@ -109,7 +109,7 @@ def serveMain():
 
 @app.route("/docs")
 def docs():
-    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname="http://localhost:5000")
+    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname=os.environ.get('FLASK_HOST'))
 
 
 if __name__ == '__main__':
