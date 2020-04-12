@@ -79,9 +79,9 @@ def parseRepos(repo):
             'size': repo['size'],
             'language': repo['language']
         }
-        parsedRepos.append(parsedRepo)
         if parsedRepo['description'] == None:
             parsedRepo['description'] = "No description provided"
+        parsedRepos.append(parsedRepo)
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
 
