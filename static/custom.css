@@ -122,7 +122,8 @@ body {
   }
 
   .btn-blue:focus {
-    background-color: #000000 !important;
+    background-color:  #064d9e !important;
+    border-color:  #064d9e !important;
   }
 
   .btn-green {
