@@ -85,18 +85,6 @@ def signup():
     github_hash = user.github_hash
     return redirect(f"/docs?username={username}&token={github_hash}")
 
-# @app.route("/signup_gitlab")
-# def signup_gitlab():
-#     resp = gitlab.get("/user")
-#     if not gitlab.authorized:
-#         return redirect(url_for("gitlab.login"))
-#     print(resp)
-#     assert resp.ok
-#     user = User.query.filter_by(username=resp.json()['login']).first()
-#     username = resp.json()['login']
-#     gitlab_hash = user.gitlab_hash
-#     return redirect(f"/docs?username={username}&token={gitlab_hash}")
-
 
 def parseGithubRepos(repos):
     parsedRepos = []
@@ -117,36 +105,6 @@ def parseGithubRepos(repos):
         parsedRepos.append(parsedRepo)
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
-
-# def getGitlabRepoLanguage(repo):
-#     resp = requests.get(f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
-#     return next(iter(resp))
-
-
-# def parseGitlabRepos(repos):
-#     parsedRepos = []
-#     for repo in repos:
-#         parsedRepo = {}
-#         parsedRepo['name'] = repo['name']
-#         if repo['description'] == None:
-#             parsedRepo['description'] = "No description provided"
-#         else:
-#             parsedRepo['description'] = repo['description']
-#         try:
-#             parsedRepo['issues'] = repo['open_issues_count']
-#         except:
-#             parsedRepo['issues'] = 0
-#         parsedRepo['owner'] = repo['namespace']['name']
-#         parsedRepo['stars'] = repo['star_count']
-#         parsedRepo['forks'] = repo['forks_count']
-#         parsedRepo['url'] = repo['web_url']
-#         try:
-#             parsedRepo['size'] = repo['statistics']['repository_size'],
-#         except:
-#             parsedRepo['size'] = None
-#         parsedRepo['language'] = getGitlabRepoLanguage(repo)
-#         parsedRepos.append(parsedRepo)
-#     return parsedRepos
 
 
 @app.route("/widget/<username>")
@@ -180,3 +138,46 @@ def docs():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# @app.route("/signup_gitlab")
+# def signup_gitlab():
+#     resp = gitlab.get("/user")
+#     if not gitlab.authorized:
+#         return redirect(url_for("gitlab.login"))
+#     print(resp)
+#     assert resp.ok
+#     user = User.query.filter_by(username=resp.json()['login']).first()
+#     username = resp.json()['login']
+#     gitlab_hash = user.gitlab_hash
+#     return redirect(f"/docs?username={username}&token={gitlab_hash}")
+
+# def getGitlabRepoLanguage(repo):
+#     resp = requests.get(f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
+#     return next(iter(resp))
+
+
+# def parseGitlabRepos(repos):
+#     parsedRepos = []
+#     for repo in repos:
+#         parsedRepo = {}
+#         parsedRepo['name'] = repo['name']
+#         if repo['description'] == None:
+#             parsedRepo['description'] = "No description provided"
+#         else:
+#             parsedRepo['description'] = repo['description']
+#         try:
+#             parsedRepo['issues'] = repo['open_issues_count']
+#         except:
+#             parsedRepo['issues'] = 0
+#         parsedRepo['owner'] = repo['namespace']['name']
+#         parsedRepo['stars'] = repo['star_count']
+#         parsedRepo['forks'] = repo['forks_count']
+#         parsedRepo['url'] = repo['web_url']
+#         try:
+#             parsedRepo['size'] = repo['statistics']['repository_size'],
+#         except:
+#             parsedRepo['size'] = None
+#         parsedRepo['language'] = getGitlabRepoLanguage(repo)
+#         parsedRepos.append(parsedRepo)
+#     return parsedRepos
