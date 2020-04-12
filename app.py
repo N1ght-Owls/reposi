@@ -170,7 +170,7 @@ def thing(username):
     else:
         if user.github_hash == token:
             resp = requests.get(
-                f"https://api.github.com/users/{username}/repos",auth={"Uzay-G", git_token}).json()
+                f"https://api.github.com/users/{username}/repos",auth=("Uzay-G", git_token)).json()
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
             return flask.render_template('widget.html', repos=parseGithubRepos(resp))
