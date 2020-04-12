@@ -15,12 +15,7 @@
                         <p>
                             {{repo["description"]}}
                         </p>
-                        <a
-                            href="{{repo['url']}}"
-                            class="card-link"
-                            target="_blank"
-                            >Source Code</a
-                        >
+                        <a href="{{repo['url']}}" class="btn btn-primary"  target="_blank" style="margin-bottom:5px;">Source Code</a>
                         <p class="card-text">
                             {% if repo["language"] %}
                             <small class="text-muted">
