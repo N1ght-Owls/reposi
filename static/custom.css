@@ -34,6 +34,10 @@ body {
   margin-right: 0px;
 
 }
+
+.main-r-logo{
+  filter: invert(0%);
+}
 .navbar-brand{
   color:black !important;
 }
@@ -97,6 +101,9 @@ body {
     text-align: left;
     display: grid;
     grid-gap: 10px;
+  }
+  .main-r-logo{
+    filter: invert(100%);
   }
   .navbar{
     background-color: black !important;

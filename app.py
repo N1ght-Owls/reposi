@@ -23,7 +23,7 @@ app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # Github blueprint
 github_bp = make_github_blueprint()
-github_bp.redirect_url = "http://localhost:5000/docs"
+github_bp.redirect_url = "https://reposi.0cdn.me/docs"
 app.register_blueprint(github_bp, url_prefix="/login")
 
 app.config["GITLAB_OAUTH_CLIENT_ID"] = os.environ.get(
