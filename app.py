@@ -39,6 +39,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
 git_token = os.environ.get("GITHUB_TOKEN")
+print(git_token)
 @oauth_authorized.connect
 def redirect_to_docs(blueprint, token):
     blueprint.token = token
@@ -128,8 +129,7 @@ def parseGithubRepos(repos):
     return parsedRepos
 
 def getGitlabRepoLanguage(repo):
-    resp = requests.get(
-        f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
+    resp = requests.get(f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
     return next(iter(resp))
 
 
