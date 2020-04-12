@@ -4,3 +4,7 @@ db.sqlite
 docker-compose.yml
 .env
 virtualenv
+reposi.crt
+reposi.key
+start.sh
+start.sh
