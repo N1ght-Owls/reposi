@@ -187,7 +187,7 @@ def thing(username):
 
 @app.route("/")
 def serveMain():
-    return flask.render_template('index.html')
+    return flask.render_template('index.html', token=git_token)
 
 
 @app.route("/docs")
