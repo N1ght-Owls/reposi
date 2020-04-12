@@ -21,7 +21,6 @@
         Since you have associated your GitHub account, you can simply
         embed
         <pre><code class="language-html">&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
-            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));'
             style="width:100%;border:none;overflow:hidden;"&gt&lt/iframe&gt
             &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt
         </code></pre>
@@ -30,7 +29,7 @@
     <div>
         <iframe
             src="{{hostname}}/widget/{{username}}?token={{token}}"
-            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="width:100%;border:none;overflow:hidden;"
+            style="width:100%;border:none;overflow:hidden;"
         ></iframe>
         <script src="/iframe.js"></script>
     </div>
