@@ -29,8 +29,9 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    github_hash = db.Column(db.String(80), unique=True, nullable=False)
+    username = db.Column(db.String(80), nullable=False)
+    git_hash = db.Column(db.String(80), unique=True, nullable=False)
+    git_type = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -42,7 +43,7 @@ else:
     print("Creating database")
     db.create_all()
 
-# Routing and repository parsing
+# Routing and repository parsing for github
 @app.route("/signup")
 def signup():
 
@@ -51,23 +52,25 @@ def signup():
         return redirect(url_for("github.login"))
     print(resp)
     assert resp.ok
-    user = User.query.filter_by(username=resp.json()['login']).first()
+    user = User.query.filter_by(
+        username=resp.json()['login'].lower(), git_type="github").first()
     if user:
         username = resp.json()['login']
-        github_hash = user.github_hash
+        git_hash = user.git_hash
     else:
-        user = User(username=resp.json()['login'],
-                    github_hash=str(random.getrandbits(128)))
+        user = User(username=resp.json()['login'].lower(),
+                    git_hash=str(random.getrandbits(128)),
+                    git_type="github")
         db.session.add(user)
         db.session.commit()
         username = resp.json()['login']
-        github_hash = user.github_hash
-    return redirect(f"{os.environ.get('FLASK_HOST')}/docs?username={username}&token={github_hash}")
+        git_hash = user.git_hash
+    return redirect(f"{os.environ.get('FLASK_HOST')}/docs?username={username}&token={git_hash}")
 
 
-def parseRepos(repo):
+def parseGithubRepos(repos):
     parsedRepos = []
-    for repo in repo:
+    for repo in repos:
         parsedRepo = {
             'name': repo['full_name'],
             'description': repo['description'],
@@ -86,23 +89,74 @@ def parseRepos(repo):
     return parsedRepos
 
 
+def getGitlabRepoLanguage(repo):
+    resp = requests.get(
+        f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
+    return next(iter(resp))
+
+
+def parseGitlabRepos(repos):
+    parsedRepos = []
+    for repo in repos:
+        parsedRepo = {}
+        parsedRepo['name'] = repo['name']
+        if repo['description'] == None:
+            parsedRepo['description'] = "No description provided"
+        else:
+            parsedRepo['description'] = repo['description']
+        try:
+            parsedRepo['issues'] = repo['open_issues_count']
+        except:
+            parsedRepo['issues'] = 0
+        parsedRepo['owner'] = repo['namespace']['name']
+        parsedRepo['stars'] = repo['star_count']
+        parsedRepo['forks'] = repo['forks_count']
+        parsedRepo['url'] = repo['web_url']
+        try:
+            parsedRepo['size'] = repo['statistics']['repository_size'],
+        except:
+            parsedRepo['size'] = None
+        parsedRepo['language'] = getGitlabRepoLanguage(repo)
+        parsedRepos.append(parsedRepo)
+    return parsedRepos
+
+
 @app.route("/widget/<username>")
 def thing(username):
     token = request.args.get('token')
     db.session.commit()
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(
+        username=username.lower(), git_type="github").first()
     resp = {}
     if user == None:
         return "User not found"
     else:
-        if user.github_hash != token:
+        if user.git_hash != token:
             return "You do not have the correct api token"
         resp = requests.get(
             f"https://api.github.com/users/{username}/repos").json()
     if type(resp) is dict:
         return f'ERROR: {resp["message"]}'
 
-    return flask.render_template('widget.html', repos=parseRepos(resp))
+    return flask.render_template('widget.html', repos=parseGithubRepos(resp))
+
+
+@app.route("/gitlab/widget/<username>")
+def gitlabThing(username):
+    # token = request.args.get('token')
+    # db.session.commit()
+    # user = User.query.filter_by(
+    #     username=username.lower(), git_type="gitlab").first()
+    # resp = {}
+    # if user == None:
+    #     return "User not found"
+    # else:
+    # if user.git_hash != token:
+    #     return "You do not have the correct api token"
+    resp = requests.get(
+        f"https://gitlab.com/api/v4/users/{username}/projects").json()
+    print(resp)
+    return flask.render_template('widget.html', repos=parseGitlabRepos(resp))
 
 
 @app.route("/")

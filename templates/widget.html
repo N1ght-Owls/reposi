@@ -1,7 +1,10 @@
 <html>
     <head>
-        <link rel="stylesheet" href="https://aspencdn.me/bootstrap/4.4.1/css/bootstrap.min.css" />
-          <link rel="stylesheet" href="/static/iframe.css" />
+        <link
+            rel="stylesheet"
+            href="https://aspencdn.me/bootstrap/4.4.1/css/bootstrap.min.css"
+        />
+        <link rel="stylesheet" href="/static/iframe.css" />
     </head>
     <body style="overflow-x: hidden;">
         <div class="row row-cols-1 row-cols-md-3">
@@ -17,8 +20,9 @@
                         </p>
                         <a
                             href="{{repo['url']}}"
-                            class="card-link"
+                            class="btn btn-primary"
                             target="_blank"
+                            style="margin-bottom: 5px;"
                             >Source Code</a
                         >
                         <p class="card-text">
@@ -35,9 +39,11 @@
                                 {{repo["forks"]}} {%if repo["forks"]!=1%} forks
                                 {%else%} fork {%endif%}
                             </small>
+                            {%if repo["size"] != None%}
                             <small class="text-muted">
                                 {{repo["size"]}}kb
                             </small>
+                            {%endif%}
                         </p>
                     </div>
                 </div>
