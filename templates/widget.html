@@ -5,7 +5,7 @@
             href="https://aspencdn.me/bootstrap/4.4.1/css/bootstrap.min.css"
         />
     </head>
-    <body style="overflow-x:hidden;">
+    <body style="overflow-x: hidden;">
         <div class="row row-cols-1 row-cols-md-3">
             {% for repo in repos %}
             <div class="col mb-4">
@@ -19,7 +19,10 @@
                             provided {% else %} {{repo["description"]}} {% endif
                             %}
                         </p>
-                        <a href="{{repo['url']}}" class="card-link"
+                        <a
+                            href="{{repo['url']}}"
+                            class="card-link"
+                            target="_blank"
                             >Source Code</a
                         >
                         <p class="card-text">

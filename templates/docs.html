@@ -20,20 +20,28 @@
     <p>
         Since you have associated your GitHub account, you can simply
         embed
-        <code>
-            &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
-            style="width: 100%; height: 50vh;"&gt&lt/iframe&gt
+        <code>&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
+            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));'
+            style="width:100%;border:none;overflow:hidden;"&gt&lt/iframe&gt
         </code>
-        on your website to display your widget. This is what it looks like:
+        on your website to display your widget and also auto resize to fit. This is what it looks like:
     </p>
-    <iframe
-        src="{{hostname}}/widget/{{username}}?token={{token}}"
-        style="width: 100%; height: 50vh;"
-    ></iframe>
+    <div>
+        <iframe
+            src="{{hostname}}/widget/{{username}}?token={{token}}"
+            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="width:100%;border:none;overflow:hidden;"
+        ></iframe>
+    </div>
     <p>
-        If you want, you can also directly use <code>{{hostname}}/widget/{{username}}?token={{token}}</code> and change it to your liking.
+        The iframe may not fit though, and in that case you could add a bit of javascript to automatically  
     </p>
+    <p>
+        If you want, you can also directly use <code>{{hostname}}/widget/{{username}}?token={{token}}</code> and include it however you want.
+    </p>
+
     {% else %}
+    
+    
     <p>
         First things first, you need to associate your GitHub account. This is
         done for security purposes to make sure we are embedding
