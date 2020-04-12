@@ -49,17 +49,19 @@ def redirect_to_docs(blueprint, token):
     user = User.query.filter_by(username=resp.json()['login']).first()
     if not user:
         user = User(username=resp.json()['login'],
-            github_hash=str(random.getrandbits(128)))
+                    github_hash=str(random.getrandbits(128)))
         db.session.add(user)
         db.session.commit()
     git_hash = user.github_hash
     return redirect(f"/docs?username={resp.json()['login']}&token={git_hash}")
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     github_hash = db.Column(db.String(80), unique=True, nullable=True)
    # gitlab_hash = db.Column(db.String(80), unique=True, nullable=True)
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -80,7 +82,7 @@ def signup():
     assert resp.ok
     user = User.query.filter_by(username=resp.json()['login']).first()
     username = resp.json()['login']
-    github_hash = user.github_hash        
+    github_hash = user.github_hash
     return redirect(f"/docs?username={username}&token={github_hash}")
 
 # @app.route("/signup_gitlab")
@@ -92,8 +94,9 @@ def signup():
 #     assert resp.ok
 #     user = User.query.filter_by(username=resp.json()['login']).first()
 #     username = resp.json()['login']
-#     gitlab_hash = user.gitlab_hash        
+#     gitlab_hash = user.gitlab_hash
 #     return redirect(f"/docs?username={username}&token={gitlab_hash}")
+
 
 def parseGithubRepos(repos):
     parsedRepos = []
@@ -163,9 +166,6 @@ def thing(username):
             return flask.render_template('widget.html', repos=parseGithubRepos(resp))
         else:
             return "You do not have a valid api token"
-
-
-    
 
 
 @app.route("/")
