@@ -1,1 +1,1 @@
-iFrameResize({ log: true }, "#myIframe");
+iFrameResize({ log: true }, "#GitHubIframe");
