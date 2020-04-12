@@ -15,9 +15,7 @@
                     </h5>
                     <div class="card-body">
                         <p>
-                            {% if repo["description"] == None %} No description
-                            provided {% else %} {{repo["description"]}} {% endif
-                            %}
+                            {{repo["description"]}}
                         </p>
                         <a
                             href="{{repo['url']}}"
