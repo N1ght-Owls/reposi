@@ -4,9 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
 import random
+import blinker
 from flask_dance.contrib.github import make_github_blueprint, github
 import flask
 from os import path
+from flask_dance.consumer import oauth_authorized
 
 app = Flask(__name__,  template_folder="templates", static_folder='static')
 
@@ -17,15 +19,25 @@ app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get(
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
     "REPOSI_GITHUB_SECRET")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-
 # Github blueprint
 github_bp = make_github_blueprint()
+github_bp.redirect_url = "http://localhost:5000/docs"
 app.register_blueprint(github_bp, url_prefix="/login")
 
 # Database model & connection
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
 
+@oauth_authorized.connect
+def redirect_to_docs(blueprint, token):
+    blueprint.token = token
+    resp = github.get("/user")
+    user = User(username=resp.json()['login'],
+                    github_hash=str(random.getrandbits(128)))
+    db.session.add(user)
+    db.session.commit()
+    github_hash = user.github_hash
+    return redirect(f"/docs?username={resp.json()['login']}&token={github_hash}")
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,17 +64,9 @@ def signup():
     print(resp)
     assert resp.ok
     user = User.query.filter_by(username=resp.json()['login']).first()
-    if user:
-        username = resp.json()['login']
-        github_hash = user.github_hash
-    else:
-        user = User(username=resp.json()['login'],
-                    github_hash=str(random.getrandbits(128)))
-        db.session.add(user)
-        db.session.commit()
-        username = resp.json()['login']
-        github_hash = user.github_hash
-    return redirect(f"{os.environ.get('FLASK_HOST')}/docs?username={username}&token={github_hash}")
+    username = resp.json()['login']
+    github_hash = user.github_hash        
+    return redirect(f"/docs?username={username}&token={github_hash}")
 
 
 def parseRepos(repo):
