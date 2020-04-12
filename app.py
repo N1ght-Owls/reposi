@@ -38,7 +38,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # Database model & connection
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
-
+git_token = os.environ.get("GITHUB_TOKEN")
 @oauth_authorized.connect
 def redirect_to_docs(blueprint, token):
     blueprint.token = token
@@ -170,7 +170,7 @@ def thing(username):
     else:
         if user.github_hash == token:
             resp = requests.get(
-                f"https://api.github.com/users/{username}/repos").json()
+                f"https://api.github.com/users/{username}/repos",auth={"Uzay-G", git_token}).json()
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
             return flask.render_template('widget.html', repos=parseGithubRepos(resp))
