@@ -7,7 +7,7 @@ import random
 import blinker
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.gitlab import make_gitlab_blueprint, gitlab
-
+from discord_webhook import DiscordWebhook
 import flask
 from os import path
 from flask_dance.consumer import oauth_authorized
@@ -16,6 +16,7 @@ app = Flask(__name__,  template_folder="templates", static_folder='static')
 
 # Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
+discord_url = os.environ.get("WEBHOOK")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get(
     "REPOSI_GITHUB_CLIENT_ID")
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
@@ -52,6 +53,7 @@ def redirect_to_docs(blueprint, token):
                     github_hash=str(random.getrandbits(128)))
         db.session.add(user)
         db.session.commit()
+        DiscordWebhook(url=discord_url, content=f"New user: {resp.json()['login']}. Check out profile at https://github.com/{resp.json()['login']}").execute()
     git_hash = user.github_hash
     return redirect(f"/docs?username={resp.json()['login']}&token={git_hash}")
 
