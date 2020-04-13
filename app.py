@@ -115,6 +115,8 @@ def thing(username):
     db.session.commit()
     user = User.query.filter_by(username=username).first()
     resp = {}
+    theme = request.args.get('theme')
+    if theme != 'dark': theme = 'light'
     if user == None:
         return "User not found"
     else:
@@ -123,7 +125,7 @@ def thing(username):
                 f"https://api.github.com/users/{username}/repos", auth=("Uzay-G", git_token)).json()
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
-            return flask.render_template('widget.html', repos=parseGithubRepos(resp))
+            return flask.render_template('widget.html', repos=parseGithubRepos(resp), theme=theme)
         else:
             return "You do not have a valid api token"
 
