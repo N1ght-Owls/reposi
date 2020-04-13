@@ -21,7 +21,7 @@
         Since you have associated your GitHub account, you can simply
         embed
         <pre><code class="language-html" id="embed">&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}"
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}" allowtransparency="true"
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt</code></pre>
         on your website to display your widget and also auto resize to fit. This is what it looks like:
@@ -31,6 +31,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"></script>
         <iframe
             src="{{hostname}}/widget/{{username}}?token={{token}}"
+            allowtransparency="true"
             style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"
         ></iframe>
         <script src="/static/iframe.js"></script>
@@ -47,7 +48,7 @@
                 btn.innerHTML = "Light Theme";
                 btn.classList = "btn btn-light";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=light"
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=light" allowtransparency="true"
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=light";
@@ -56,7 +57,7 @@
                 btn.innerHTML = "Dark Theme";
                 btn.classList = "btn btn-dark";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=dark"
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=dark" allowtransparency="true"
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=dark";
