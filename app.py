@@ -7,7 +7,7 @@ import random
 import blinker
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.gitlab import make_gitlab_blueprint, gitlab
-
+from discord_webhook import DiscordWebhook
 import flask
 from os import path
 from flask_dance.consumer import oauth_authorized
@@ -16,6 +16,7 @@ app = Flask(__name__,  template_folder="templates", static_folder='static')
 
 # Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
+discord_url = os.environ.get("WEBHOOK")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get(
     "REPOSI_GITHUB_CLIENT_ID")
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
@@ -52,6 +53,7 @@ def redirect_to_docs(blueprint, token):
                     github_hash=str(random.getrandbits(128)))
         db.session.add(user)
         db.session.commit()
+        DiscordWebhook(url=discord_url, content=f"New user: {resp.json()['login']}. Check out profile at https://github.com/{resp.json()['login']}").execute()
     git_hash = user.github_hash
     return redirect(f"/docs?username={resp.json()['login']}&token={git_hash}")
 
@@ -85,18 +87,6 @@ def signup():
     github_hash = user.github_hash
     return redirect(f"/docs?username={username}&token={github_hash}")
 
-# @app.route("/signup_gitlab")
-# def signup_gitlab():
-#     resp = gitlab.get("/user")
-#     if not gitlab.authorized:
-#         return redirect(url_for("gitlab.login"))
-#     print(resp)
-#     assert resp.ok
-#     user = User.query.filter_by(username=resp.json()['login']).first()
-#     username = resp.json()['login']
-#     gitlab_hash = user.gitlab_hash
-#     return redirect(f"/docs?username={username}&token={gitlab_hash}")
-
 
 def parseGithubRepos(repos):
     parsedRepos = []
@@ -117,36 +107,6 @@ def parseGithubRepos(repos):
         parsedRepos.append(parsedRepo)
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
-
-# def getGitlabRepoLanguage(repo):
-#     resp = requests.get(f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
-#     return next(iter(resp))
-
-
-# def parseGitlabRepos(repos):
-#     parsedRepos = []
-#     for repo in repos:
-#         parsedRepo = {}
-#         parsedRepo['name'] = repo['name']
-#         if repo['description'] == None:
-#             parsedRepo['description'] = "No description provided"
-#         else:
-#             parsedRepo['description'] = repo['description']
-#         try:
-#             parsedRepo['issues'] = repo['open_issues_count']
-#         except:
-#             parsedRepo['issues'] = 0
-#         parsedRepo['owner'] = repo['namespace']['name']
-#         parsedRepo['stars'] = repo['star_count']
-#         parsedRepo['forks'] = repo['forks_count']
-#         parsedRepo['url'] = repo['web_url']
-#         try:
-#             parsedRepo['size'] = repo['statistics']['repository_size'],
-#         except:
-#             parsedRepo['size'] = None
-#         parsedRepo['language'] = getGitlabRepoLanguage(repo)
-#         parsedRepos.append(parsedRepo)
-#     return parsedRepos
 
 
 @app.route("/widget/<username>")
@@ -180,3 +140,46 @@ def docs():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# @app.route("/signup_gitlab")
+# def signup_gitlab():
+#     resp = gitlab.get("/user")
+#     if not gitlab.authorized:
+#         return redirect(url_for("gitlab.login"))
+#     print(resp)
+#     assert resp.ok
+#     user = User.query.filter_by(username=resp.json()['login']).first()
+#     username = resp.json()['login']
+#     gitlab_hash = user.gitlab_hash
+#     return redirect(f"/docs?username={username}&token={gitlab_hash}")
+
+# def getGitlabRepoLanguage(repo):
+#     resp = requests.get(f"https://gitlab.com/api/v4/projects/{repo['id']}/languages").json()
+#     return next(iter(resp))
+
+
+# def parseGitlabRepos(repos):
+#     parsedRepos = []
+#     for repo in repos:
+#         parsedRepo = {}
+#         parsedRepo['name'] = repo['name']
+#         if repo['description'] == None:
+#             parsedRepo['description'] = "No description provided"
+#         else:
+#             parsedRepo['description'] = repo['description']
+#         try:
+#             parsedRepo['issues'] = repo['open_issues_count']
+#         except:
+#             parsedRepo['issues'] = 0
+#         parsedRepo['owner'] = repo['namespace']['name']
+#         parsedRepo['stars'] = repo['star_count']
+#         parsedRepo['forks'] = repo['forks_count']
+#         parsedRepo['url'] = repo['web_url']
+#         try:
+#             parsedRepo['size'] = repo['statistics']['repository_size'],
+#         except:
+#             parsedRepo['size'] = None
+#         parsedRepo['language'] = getGitlabRepoLanguage(repo)
+#         parsedRepos.append(parsedRepo)
+#     return parsedRepos
