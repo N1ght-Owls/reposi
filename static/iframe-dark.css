@@ -1,5 +1,5 @@
 body {
-  background: none transparent;
+  background: none transparent !important;
   padding: 10px;
   overflow-x: hidden;
   overflow-y: visible;
