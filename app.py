@@ -148,7 +148,7 @@ def contact():
         flash('Your message was received')
         DiscordWebhook(url=discord_url, content=f"Contact @hackathon: name: {form.name.data}, email: {form.email.data}, message: {form.message.data}").execute()
     else:
-        flash('Your message was not transfered correctly.')
+        flash('Your message was not transferred correctly.')
     return redirect('/')
 
 
