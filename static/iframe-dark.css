@@ -1,5 +1,10 @@
+html{
+  scrollbar-color: #747474 #000000;
+  scrollbar-width: thin;
+   background-color: transparent !important;
+}
+
 body {
-  background: none transparent !important;
   padding: 10px;
   overflow-x: hidden;
   overflow-y: visible;
