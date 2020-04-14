@@ -20,6 +20,7 @@
     <p>
         Since you have associated your GitHub account, you can simply
         embed
+        <script src="/static/docs.js"></script>
         <pre><code class="language-html" id="embed">&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
 &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}" allowtransparency="true"
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
@@ -27,8 +28,11 @@
         on your website to display your widget and also auto resize to fit. This is what it looks like:
     </p>
     <div>
-        <button class="btn btn-light" onclick="changeTheme(this)">Light Theme</button>
+      <p>Toogle theme:</P>
+        <button class="btn btn-light" onclick="changeTheme(this)" style="margin-bottom:20px;">Light Theme</button>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/prism.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/prismjs@1.19.0/plugins/autoloader/prism-autoloader.min.js"></script>
         <iframe
             src="{{hostname}}/widget/{{username}}?token={{token}}"
             allowtransparency="true"
@@ -40,7 +44,7 @@
         The iframe may not fit though, and in that case you could add a bit of javascript to automatically fit it correctly.
     </p>
     <p>
-        If you want, you can also directly use <code>{{hostname}}/widget/{{username}}?token={{token}}</code> and include it however you want.
+        If you want, you can also directly use <code id="plainLink">{{hostname}}/widget/{{username}}?token={{token}}</code> and include it however you want.
     </p>
     <script>
         function changeTheme(btn) {
@@ -52,6 +56,8 @@
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=light";
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme=light"
+                Prism.highlightAll()
             }
             else {
                 btn.innerHTML = "Dark Theme";
@@ -61,6 +67,8 @@
     style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=dark";
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme=dark"
+                 Prism.highlightAll()
 
             }
         }
