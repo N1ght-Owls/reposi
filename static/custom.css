@@ -1,7 +1,13 @@
 html {
   scrollbar-width: thin !important;
 }
-
+footer {
+  width: 75%;
+  margin: auto;
+}
+#contact-form {
+  margin-top: 40px;
+}
 .button {
   padding: 5px;
   border-radius: 5px;

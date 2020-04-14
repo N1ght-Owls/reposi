@@ -47,6 +47,30 @@
         </ul>
     </div>
 </nav>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
 {% block content %}{% endblock %}
-
+<footer>
+    <form action="/contact" method="post" novalidate id="contact-form">
+        <h2>Contact Us</h2>
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
+        </div>
+        {{ form.message(cols="10", rows="10") }}
+        <p>{{ form.submit() }}</p>
+    </form>
+</footer>
 </html>
