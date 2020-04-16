@@ -7,4 +7,3 @@ virtualenv
 reposi.crt
 reposi.key
 start.sh
-start.sh
