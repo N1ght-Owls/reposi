@@ -1,14 +1,15 @@
 <html>
     <head>
-      <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.{{ primary }}-{{ secondary }}.min.css">
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://aspencdn.me/bootstrap/4.4.1/css/bootstrap.min.css"
+        />
         <link rel="stylesheet" id="iframe-theme" href="/static/iframe-{{ theme }}.css" />
     </head>
-    <body style="overflow-x: hidden; background-color: transparent">
-        <div class="mdl-grid" style="margin: 10px">
+    <body style="overflow-x: hidden;background-color: transparent;">
+        <div class="row row-cols-1 row-cols-md-3">
             {% for repo in repos %}
+<<<<<<< HEAD
             <div class="mdl-cell mdl-cell--4-col">
                 <div class="card mdl-card mdl-shadow--4dp mdl-js-ripple-effect" style="width: 100%; border-radius: 0.5em">
                   <div class="mdl-card__title card-header">
@@ -51,6 +52,45 @@
                           {%endif%}
                       </p>
                   </div>
+=======
+            <div class="col mb-4">
+                <div class="card">
+                    <h5 class="card-header">
+                        {{repo["name"]}}
+                    </h5>
+                    <div class="card-body">
+                        <p>
+                            {{repo["description"]}}
+                        </p>
+                        <a
+                            href="{{repo['url']}}"
+                            class="btn btn-primary"
+                            target="_blank"
+                            style="margin-bottom: 5px;"
+                            >Source Code</a
+                        >
+                        <p class="card-text">
+                            {% if repo["language"] %}
+                            <small class="text-muted">
+                                {{repo["language"]}}
+                            </small>
+                            {% endif %}
+                            <small class="text-muted">
+                                {{repo["stars"]}} {%if repo["stars"]!=1%} stars
+                                {%else%} star {%endif%}
+                            </small>
+                            <small class="text-muted">
+                                {{repo["forks"]}} {%if repo["forks"]!=1%} forks
+                                {%else%} fork {%endif%}
+                            </small>
+                            {%if repo["size"] != None%}
+                            <small class="text-muted">
+                                {{repo["size"]}}kb
+                            </small>
+                            {%endif%}
+                        </p>
+                    </div>
+>>>>>>> parent of 82da4c9... Merge pull request #1 from srevinsaju/material
                 </div>
             </div>
             {% endfor %}

@@ -26,20 +26,16 @@ body {
 }
 
 .card {
-  background-color: #333;
-  color: #FFF;
   outline: none;
   border: none;
 }
 
 .card-body {
   background-color: #333;
-  color: #FFF !important
 }
 
 .card-header {
   background-color: #444;
-  color: #FFF;
 }
 
 .text-muted {

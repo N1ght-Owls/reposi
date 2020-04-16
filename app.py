@@ -112,8 +112,6 @@ def parseGithubRepos(repos):
 @app.route("/widget/<username>")
 def thing(username):
     token = request.args.get('token')
-    primary = request.args.get('primary', 'indigo')
-    secondary = request.args.get('secondary', 'blue')
     db.session.commit()
     user = User.query.filter_by(username=username).first()
     resp = {}
@@ -127,13 +125,7 @@ def thing(username):
                 f"https://api.github.com/users/{username}/repos?per_page=100", auth=("Uzay-G", git_token)).json()
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
-            return flask.render_template(
-                'widget.html',
-                repos=parseGithubRepos(resp),
-                theme=theme, 
-                primary=primary,
-                secondary=secondary
-            )
+            return flask.render_template('widget.html', repos=parseGithubRepos(resp), theme=theme)
         else:
             return "You do not have a valid api token"
 
