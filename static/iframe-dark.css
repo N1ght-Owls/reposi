@@ -3,7 +3,9 @@ html{
   scrollbar-width: thin;
    background-color: transparent !important;
 }
-
+.mdl-card__title-text, mdl-card__supporting-text card-body p {
+  color: white;
+}
 body {
   background-color: transparent !important;
   padding: 10px;
