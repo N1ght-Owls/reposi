@@ -5,6 +5,8 @@ html{
 }
 
 body {
+  background-color: transparent !important;
+  padding: 10px;
   overflow-x: hidden;
   overflow-y: visible;
   max-width: 100vw;

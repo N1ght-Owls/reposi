@@ -1,10 +1,10 @@
 from werkzeug.wrappers import Request
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
 import random
-import blinker
+from contact_form import ContactForm
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.gitlab import make_gitlab_blueprint, gitlab
 from discord_webhook import DiscordWebhook
@@ -140,12 +140,24 @@ def thing(username):
 
 @app.route("/")
 def serveMain():
-    return flask.render_template('index.html')
+    form = ContactForm()
+    return flask.render_template('index.html', form=form)
 
 
 @app.route("/docs")
 def docs():
-    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname=os.environ.get('FLASK_HOST'))
+    form = ContactForm()
+    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname=os.environ.get('FLASK_HOST'), form=form)
+
+@app.route("/contact", methods=['POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        flash('Your message was received')
+        DiscordWebhook(url=discord_url, content=f"Contact @hackathon: name: {form.name.data}, email: {form.email.data}, message: {form.message.data}").execute()
+    else:
+        flash('Your message was not transferred correctly.')
+    return redirect('/')
 
 
 if __name__ == '__main__':
