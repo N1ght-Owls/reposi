@@ -9,50 +9,6 @@
     <body style="overflow-x: hidden;background-color: transparent;">
         <div class="row row-cols-1 row-cols-md-3">
             {% for repo in repos %}
-<<<<<<< HEAD
-            <div class="mdl-cell mdl-cell--4-col">
-                <div class="card mdl-card mdl-shadow--4dp mdl-js-ripple-effect" style="width: 100%; border-radius: 0.5em">
-                  <div class="mdl-card__title card-header">
-                      <h5 class="mdl-card__title-text ">
-                          {{repo["name"]}}
-                      </h5>
-                  </div>
-                  <div class="mdl-card__supporting-text card-body" style="width: 100%;">
-                      <p>
-                          {{repo["description"]}}
-                      </p>
-
-
-                      <a href="{{repo['url']}}"
-                          target="_blank"
-                          style="margin-bottom: 5px;">
-                          <button class="mdl-button mdl-js-button mdl-button--raised
-                          mdl-js-ripple-effect mdl-button--accent">
-                            Source Code
-                          </button>
-                        </a>
-                      <p class="card-text">
-                          {% if repo["language"] %}
-                          <small class="text-muted">
-                              {{repo["language"]}}
-                          </small>
-                          {% endif %}
-                          <small class="text-muted">
-                              {{repo["stars"]}} {%if repo["stars"]!=1%} stars
-                              {%else%} star {%endif%}
-                          </small>
-                          <small class="text-muted">
-                              {{repo["forks"]}} {%if repo["forks"]!=1%} forks
-                              {%else%} fork {%endif%}
-                          </small>
-                          {%if repo["size"] != None%}
-                          <small class="text-muted">
-                              {{repo["size"]}}kb
-                          </small>
-                          {%endif%}
-                      </p>
-                  </div>
-=======
             <div class="col mb-4">
                 <div class="card">
                     <h5 class="card-header">
@@ -77,7 +33,7 @@
                             {% endif %}
                             <small class="text-muted">
                                 {{repo["stars"]}} {%if repo["stars"]!=1%} stars
-                                {%else%} star {%endif%}
+                                {%else%} <i class="fas fa-star"></i> star {%endif%}
                             </small>
                             <small class="text-muted">
                                 {{repo["forks"]}} {%if repo["forks"]!=1%} forks
@@ -90,7 +46,6 @@
                             {%endif%}
                         </p>
                     </div>
->>>>>>> parent of 85be895... Merge branch 'master' of https://github.com/N1ght-Owls/reposi
                 </div>
             </div>
             {% endfor %}
