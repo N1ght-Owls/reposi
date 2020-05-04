@@ -6,11 +6,12 @@
         />
         <link rel="stylesheet" id="iframe-theme" href="/static/iframe-{{ theme }}.css" />
     </head>
+
     <body style="overflow-x: hidden;background-color: transparent;">
         <div class="row row-cols-1 row-cols-md-3">
             {% for repo in repos %}
             <div class="col mb-4">
-                <div class="card">
+                <div class="card" onclick="window.top.location.href = '{{repo['url']}}';">
                     <h5 class="card-header">
                         {{repo["name"]}}
                     </h5>
@@ -18,13 +19,7 @@
                         <p>
                             {{repo["description"]}}
                         </p>
-                        <a
-                            href="{{repo['url']}}"
-                            class="btn btn-primary"
-                            target="_blank"
-                            style="margin-bottom: 5px;"
-                            >Source Code</a
-                        >
+                        <a href="{{repo['url']}}" class="btn btn-primary" target="_blank" style="margin-bottom: 5px;" >Source Code</a>
                         <p class="card-text">
                             {% if repo["language"] %}
                             <small class="text-muted">
