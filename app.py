@@ -104,7 +104,7 @@ def parseGithubRepos(repos):
         }
         if parsedRepo['description'] == None:
             parsedRepo['description'] = "No description provided"
-        parsedRepos.append(parsedRepo)
+        if repo['fork'] == False: parsedRepos.append(parsedRepo)
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
 
