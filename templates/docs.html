@@ -90,22 +90,26 @@
         function displayForks(btn2) {
             if (btn2.innerHTML == "Forks Shown") {
                 btn2.innerHTML = "Forks Hidden";
+                forks = "hidden"
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
                 &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme + `&forks=`+ forks +`" allowtransparency="true"
                 style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
                 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
-                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
-                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
+                console.error("{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks)
                 Prism.highlightAll()
             }
             else {
                 btn2.innerHTML = "Forks Shown";
+                forks = "shown"
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
                 &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme+ `&forks=`+ forks+`" allowtransparency="true"
                 style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
                 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
-                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
-                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
+                console.error("{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks)
                 Prism.highlightAll()
             }
             }
