@@ -28,8 +28,18 @@
         on your website to display your widget and also auto resize to fit. This is what it looks like:
     </p>
     <div>
-      <p>Toggle theme:</P>
-        <button class="btn btn-light" onclick="changeTheme(this)" style="margin-bottom:20px;">Light Theme</button>
+    <div class="row">
+        <div class="col-md-2">
+            <p>Toggle theme:</P>
+            <button class="btn btn-light" onclick="changeTheme(this)" style="margin-bottom:20px;">Light Theme</button>
+        </div>
+        <div class="col-md-2">
+            <p>Toggle Forks:</P>
+            <button class="btn btn-light" onclick="displayForks(this)" style="margin-bottom:20px;">Forks Shown</button>
+        </div>
+    </div>
+
+    
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/prism.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/prismjs@1.19.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -47,31 +57,58 @@
         If you want, you can also directly use <code id="plainLink">{{hostname}}/widget/{{username}}?token={{token}}</code> and include it however you want.
     </p>
     <script>
+        var theme = "light";
+        var forks = "shown";
         function changeTheme(btn) {
+            
             if (btn.innerHTML == "Dark Theme") {
                 btn.innerHTML = "Light Theme";
                 btn.classList = "btn btn-light";
+                theme = "light";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=light" allowtransparency="true"
-    style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
-                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=light";
-                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme=light"
+                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
+                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
                 Prism.highlightAll()
             }
             else {
                 btn.innerHTML = "Dark Theme";
                 btn.classList = "btn btn-dark";
+                theme = "dark";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=dark" allowtransparency="true"
-    style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
-                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme=dark";
-                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme=dark"
+                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
+                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
                  Prism.highlightAll()
 
             }
         }
+        function displayForks(btn2) {
+            if (btn2.innerHTML == "Forks Shown") {
+                btn2.innerHTML = "Forks Hidden";
+                document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
+                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme + `&forks=`+ forks +`" allowtransparency="true"
+                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                Prism.highlightAll()
+            }
+            else {
+                btn2.innerHTML = "Forks Shown";
+                document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
+                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme+ `&forks=`+ forks+`" allowtransparency="true"
+                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+                document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
+                Prism.highlightAll()
+            }
+            }
     </script>
     {% else %}
 

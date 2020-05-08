@@ -90,6 +90,7 @@ def signup():
 
 def parseGithubRepos(repos):
     parsedRepos = []
+    displayForks = request.args.get('forks')
     for repo in repos:
         parsedRepo = {
             'name': repo['full_name'],
@@ -104,7 +105,13 @@ def parseGithubRepos(repos):
         }
         if parsedRepo['description'] == None:
             parsedRepo['description'] = "No description provided"
-        if repo['fork'] == False: parsedRepos.append(parsedRepo)
+        
+        if displayForks == 'hidden':
+          if repo['fork'] == False: parsedRepos.append(parsedRepo)
+        else:
+            parsedRepos.append(parsedRepo)
+
+       # if repo['fork'] == False: parsedRepos.append(parsedRepo)
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
 
@@ -128,7 +135,6 @@ def thing(username):
             return flask.render_template('widget.html', repos=parseGithubRepos(resp), theme=theme)
         else:
             return "You do not have a valid api token"
-
 
 @app.route("/")
 def serveMain():
