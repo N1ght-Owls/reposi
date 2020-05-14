@@ -15,6 +15,29 @@
         show you how to embed your GitHub information into your personal
         website.
     </p>
+    <h3>Customization</h3>
+    <p>Preview below embed instructions</p>
+    <div class="row" style="margin-bottom: 30px;">
+        
+        <div class="col-md-4">
+            <div class="card" style=" width: 300px; background-color: #323a3d; color:white; cursor: pointer !important;" onclick="changeTheme('Light')" id="#lightButton">
+            <img src="/static/light.png" height="250px" width="300px" style="margin-left:-1px; margin-top: -1px;"><img>
+            <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px; font-size: 20px;">Light Theme</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style=" width: 300px; cursor: pointer !important; color:black;" id="#darkButton" onclick="changeTheme('Dark')">
+            <img src="/static/dark.png" height="250px" width="300px" style="margin-left:-1px; margin-top: -1px;"><img>
+            <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px; font-size: 20px;">Dark Theme</p>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+        <div class="col-md-2">
+            <p>Toggle Forks:</P>
+            <button class="btn btn-light" onclick="displayForks(this)" style="margin-bottom:20px;">Forks Shown</button>
+        </div>
+    </div>
     <h3>Embedding</h3>
     {% if token != None %}
     <p>
@@ -23,21 +46,14 @@
         <script src="/static/docs.js"></script>
         <pre><code class="language-html" id="embed">&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
 &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}" allowtransparency="true"
-    style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
 &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt</code></pre>
         on your website to display your widget and also auto resize to fit. This is what it looks like:
     </p>
     <div>
-    <div class="row">
-        <div class="col-md-2">
-            <p>Toggle theme:</P>
-            <button class="btn btn-light" onclick="changeTheme(this)" style="margin-bottom:20px;">Light Theme</button>
-        </div>
-        <div class="col-md-2">
-            <p>Toggle Forks:</P>
-            <button class="btn btn-light" onclick="displayForks(this)" style="margin-bottom:20px;">Forks Shown</button>
-        </div>
-    </div>
+           
+         <!-- <button class="btn btn-light" onclick="changeTheme(this)" style="margin-bottom:20px;">Light Theme</button> -->
+   
 
     
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"></script>
@@ -59,31 +75,36 @@
     <script>
         var theme = "light";
         var forks = "shown";
-        function changeTheme(btn) {
+        var color = "light";
+        var darkbtn = document.getElementById("#darkButton")
+        var lightbtn = document.getElementById("#lightButton")
+        function changeTheme(color) {
             
-            if (btn.innerHTML == "Dark Theme") {
-                btn.innerHTML = "Light Theme";
-                btn.classList = "btn btn-light";
-                theme = "light";
+            if (color == "Dark") {
+                lightbtn.style = "width: 300px; cursor: pointer !important; color:black !important;"
+                darkbtn.style = " width: 300px; background-color: #323a3d; color:white; cursor: pointer !important;"
+                theme = "dark";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
-                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
+style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
                 document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
                 Prism.highlightAll()
+                document.getElementsByTagName("iframe").contentWindow.location.reload();
             }
             else {
-                btn.innerHTML = "Dark Theme";
-                btn.classList = "btn btn-dark";
-                theme = "dark";
+                darkbtn.style = "width: 300px; cursor: pointer !important;  color:black !important;"
+                lightbtn.style = " width: 300px; background-color: #323a3d; color:white; cursor: pointer !important;"
+                theme = "light";
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
-                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+theme+`&forks=`+forks+`" allowtransparency="true"
+style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
                 document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks;
-                 Prism.highlightAll()
+                Prism.highlightAll()
+                document.getElementsByTagName("iframe").contentWindow.location.reload();
 
             }
         }
@@ -92,25 +113,27 @@
                 btn2.innerHTML = "Forks Hidden";
                 forks = "hidden"
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme + `&forks=`+ forks +`" allowtransparency="true"
-                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme + `&forks=`+ forks +`" allowtransparency="true"
+style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
                 document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
                 console.error("{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks)
                 Prism.highlightAll()
+                document.getElementsByTagName("iframe").contentWindow.location.reload();
             }
             else {
                 btn2.innerHTML = "Forks Shown";
                 forks = "shown"
                 document.getElementById("embed").innerHTML = `&ltscript src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.2.10/iframeResizer.min.js"&gt&lt/script&gt
-                &ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme+ `&forks=`+ forks+`" allowtransparency="true"
-                style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
-                &ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
+&ltiframe src="{{hostname}}/widget/{{username}}?token={{token}}&theme=`+ theme+ `&forks=`+ forks+`" allowtransparency="true"
+style="width:100%;border:none;overflow:hidden;" id="GitHubIframe"&gt&lt/iframe&gt
+&ltscript src="{{hostname}}/static/iframe.js"&gt&lt/script&gt`
                 document.getElementsByTagName("iframe")[0].src = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
                 document.getElementById("plainLink").innerHTML = "{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&forks="+forks;
                 console.error("{{hostname}}/widget/{{username}}?token={{token}}&theme="+theme+"&fork"+forks)
                 Prism.highlightAll()
+                document.getElementsByTagName("iframe").contentWindow.location.reload();
             }
             }
     </script>

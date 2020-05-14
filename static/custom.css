@@ -219,3 +219,15 @@ pre {
   background: rgba(242, 242, 242, 0.2);
 }
 }
+
+.card {
+  outline: thin;
+  border: thin;
+  overflow: hidden;
+  transition: 0.2s;
+
+}
+img{
+  outline: thin;
+  border: thin;
+}
