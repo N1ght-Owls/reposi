@@ -56,3 +56,6 @@ body {
   opacity: .3;
   transition: 0.2s;
 }
+img {
+	width: 30px;
+}

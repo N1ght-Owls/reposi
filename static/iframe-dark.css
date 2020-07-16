@@ -82,3 +82,7 @@ body {
 ::selection {
   background: rgba(242, 242, 242, 0.2);
 }
+
+img {
+	height: 30px;
+}
