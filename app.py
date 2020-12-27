@@ -127,12 +127,21 @@ def thing(username):
     if user == None:
         return "User not found"
     else:
+        repos = []
         if user.github_hash == token:
+            page = 1
             resp = requests.get(
-                f"https://api.github.com/users/{username}/repos?per_page=100", auth=("Uzay-G", git_token)).json()
+                f"https://api.github.com/users/{username}/repos?per_page=100&page=1", auth=("Uzay-G", git_token)).json()
+            while resp != []:
+                print(resp, "\n\n\n")
+                repos += parseGithubRepos(resp)
+                page += 1
+                resp = requests.get(
+                    f"https://api.github.com/users/{username}/repos?per_page=100&page={page}", auth=("Uzay-G", git_token)).json()
+
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
-            return flask.render_template('widget.html', repos=parseGithubRepos(resp), theme=theme)
+            return flask.render_template('widget.html', repos=repos, theme=theme)
         else:
             return "You do not have a valid api token"
 
