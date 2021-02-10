@@ -17,6 +17,7 @@ app = Flask(__name__,  template_folder="templates", static_folder='static')
 # Various environmental variables
 app.secret_key = os.environ.get("FLASK_SECRET")
 discord_url = os.environ.get("WEBHOOK")
+FLASK_HOST = os.environ.get("FLASK_HOST")
 app.config["GITHUB_OAUTH_CLIENT_ID"] = os.environ.get(
     "REPOSI_GITHUB_CLIENT_ID")
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
@@ -24,7 +25,7 @@ app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # Github blueprint
 github_bp = make_github_blueprint()
-github_bp.redirect_url = "https://reposi.0cdn.me/docs"
+github_bp.redirect_url = FLASK_HOST+"/docs"
 app.register_blueprint(github_bp, url_prefix="/login")
 
 app.config["GITLAB_OAUTH_CLIENT_ID"] = os.environ.get(
@@ -107,11 +108,13 @@ def parseGithubRepos(repos):
             parsedRepo['description'] = "No description provided"
         
         if displayForks == 'hidden':
-          if repo['fork'] == False: parsedRepos.append(parsedRepo)
+          if repo['fork'] == False: 
+            parsedRepos.append(parsedRepo)
         else:
             parsedRepos.append(parsedRepo)
 
        # if repo['fork'] == False: parsedRepos.append(parsedRepo)
+
     parsedRepos.sort(key=lambda repo: repo["stars"], reverse=True)
     return parsedRepos
 
@@ -154,7 +157,7 @@ def serveMain():
 @app.route("/docs")
 def docs():
     form = ContactForm()
-    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname=os.environ.get('FLASK_HOST'), form=form)
+    return flask.render_template('docs.html', username=request.args.get('username'), token=request.args.get("token"), hostname=FLASK_HOST, form=form)
 
 @app.route("/contact", methods=['POST'])
 def contact():
