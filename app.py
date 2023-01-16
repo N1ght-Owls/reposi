@@ -11,6 +11,7 @@ from discord_webhook import DiscordWebhook
 import flask
 from os import path
 from flask_dance.consumer import oauth_authorized
+import json
 
 app = Flask(__name__,  template_folder="templates", static_folder='static')
 
@@ -141,6 +142,8 @@ def thing(username):
 
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
+            if request.headers.get('Accept') == 'application/json':
+                return app.response_class(response=json.dumps(repos), status=200, mimetype='application/json')
             return flask.render_template('widget.html', repos=repos, theme=theme)
         else:
             return "You do not have a valid api token"
