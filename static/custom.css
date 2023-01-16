@@ -231,3 +231,7 @@ img{
   outline: thin;
   border: thin;
 }
+
+#plainLink{
+  color: #ec9bc1;
+}
