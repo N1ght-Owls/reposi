@@ -25,7 +25,7 @@ app.config["GITHUB_OAUTH_CLIENT_SECRET"] = os.environ.get(
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # Github blueprint
 github_bp = make_github_blueprint()
-github_bp.redirect_url = FLASK_HOST+"/docs"
+github_bp.redirect_url = FLASK_HOST+"/login/github/authorized"
 app.register_blueprint(github_bp, url_prefix="/login")
 
 app.config["GITLAB_OAUTH_CLIENT_ID"] = os.environ.get(
@@ -41,7 +41,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
 git_token = os.environ.get("GITHUB_TOKEN")
-print(git_token)
 @oauth_authorized.connect
 def redirect_to_docs(blueprint, token):
     blueprint.token = token
@@ -56,7 +55,7 @@ def redirect_to_docs(blueprint, token):
         db.session.commit()
         DiscordWebhook(url=discord_url, content=f"New user: {resp.json()['login']}. Check out profile at https://github.com/{resp.json()['login']}").execute()
     git_hash = user.github_hash
-    return redirect(f"/docs?username={resp.json()['login']}&token={git_hash}")
+    return f"<script>location.replace('{FLASK_HOST}/docs?username={resp.json()['login']}&token={git_hash}')</script>"
 
 
 class User(db.Model):
@@ -68,25 +67,25 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-
-if path.exists("db.sqlite") == True:
-    print("Database exists")
-else:
-    print("Creating database")
-    db.create_all()
+with app.app_context():
+    if path.exists("instance/db.sqlite") == True:
+        print("Database exists")
+    else:
+        print("Creating database")
+        db.create_all()
 
 # Routing and repository parsing
 @app.route("/signup")
 def signup():
     resp = github.get("/user")
     if not github.authorized:
-        return redirect(url_for("github.login"))
+        return f"<script>location.replace('{FLASK_HOST}/login/github')</script>"
     print(resp)
     assert resp.ok
     user = User.query.filter_by(username=resp.json()['login']).first()
     username = resp.json()['login']
     github_hash = user.github_hash
-    return redirect(f"/docs?username={username}&token={github_hash}")
+    return f"<script>location.replace('{FLASK_HOST}/docs?username={username}&token={github_hash}') </script>"
 
 
 def parseGithubRepos(repos):
@@ -134,13 +133,11 @@ def thing(username):
         if user.github_hash == token:
             page = 1
             resp = requests.get(
-                f"https://api.github.com/users/{username}/repos?per_page=100&page=1", auth=("Uzay-G", git_token)).json()
+                f"https://api.github.com/users/{username}/repos?per_page=100&page=1", headers={"Accept": "application/vnd.github.v3+json"}).json()
             while resp != []:
-                print(resp, "\n\n\n")
                 repos += parseGithubRepos(resp)
                 page += 1
-                resp = requests.get(
-                    f"https://api.github.com/users/{username}/repos?per_page=100&page={page}", auth=("Uzay-G", git_token)).json()
+                resp = requests.get(f"https://api.github.com/users/{username}/repos?per_page=100&page={page}", headers={ "Accept": "application/vnd.github.v3+json"}).json()
 
             if type(resp) is dict:
                 return f'ERROR: {resp["message"]}'
